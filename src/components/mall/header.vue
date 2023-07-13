@@ -45,6 +45,7 @@
         data(){
             // eslint-disable-next-line no-unused-labels
             this_path:this.$route.path
+
         },
     }
     
