@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import mallLogin from '../views/mall/login.vue'
 import mall_index from '../views/mall/index.vue'
+import mall_test from '../views/mall/test.vue'
+
+
 
 
 Vue.use(VueRouter)
@@ -9,11 +12,16 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name:"mall_index",
+    component: mall_index
+  },
+  {
+    path: '/mall/login',
     name:"mall_login",
     component: mallLogin
   },
   {
-    path: '/mall/login',
+    path: '/login',
     name:"mall_login",
     component: mallLogin
   },
@@ -22,6 +30,11 @@ const routes = [
     name:"mall_index",
     component: mall_index
   },
+  {
+    path: '/test',
+    name:"mall_test",
+    component: mall_test
+  }
 
   // {
   //   path: '/mall/login',
@@ -33,6 +46,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode:'history',
   routes
 })
 

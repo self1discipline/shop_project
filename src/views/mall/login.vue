@@ -2,10 +2,10 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div id="app">
+    <div id="login">
         <div class="top center">
             <div class="logo center">
-                <a href="##" target="_blank"><img v-bind:src="logo" alt=""></a>
+                <a href="###"  onclick="return false" target="_blank"><img v-bind:src="logo" alt=""></a>
             </div>
         </div>
         <div class="form center">
@@ -34,7 +34,7 @@
                         </div>  -->
                         </div>
                         <div class="login_submit">
-                            <input class="submit" type="submit" value="立即登录"/>
+                            <input class="submit" type="submit" value="立即登录" />
                         </div>
                     </form>
                 </div>
@@ -46,6 +46,8 @@
 <script>
 import { validPhoneNumber, validPassword } from '@/assets/admin/dist/js/public.js'
 import Swal from '@/assets/admin/plugins/sweetalert2/sweetalert2.all.min.js'
+// eslint-disable-next-line no-unused-vars
+import router from "@/router";
 
 export default {
     data() {
@@ -63,8 +65,6 @@ export default {
     methods: {
         handleSubmit: function () {
             // alert(this.loginform.loginName)
-            // const that=this
-            // this.$options.methods.sendMsg(that);
             var loginName = this.loginform.loginName;
             if (!validPhoneNumber(loginName)) {
                 Swal.fire({
@@ -82,30 +82,62 @@ export default {
                 });
                 return
             }
+            const that = this
+            this.$options.methods.sendMsg(that,loginName)
             return {}
         },
-        // sendMsg:function(that){
-            // this.axios.post('/user', {
-            //     loginName: that.loginform.loginName,
-            //     password: that.loginform.password
-            //     })
-            //     .then(function (response) {
-            //         alert(response.data);
-            //     })
-            //     .catch(function (error) {
-            //         console.log(error);
-            //     });
-            
-        // }
+        sendMsg: function (that) {
+            // alert(loginName)
+            that.$axios.post('/login', {
+                loginName: that.loginform.loginName,
+                password: that.loginform.password
+            })
+                .then(function (response) {
+                    var resp = response.data
+                    console.log(resp)
+                    if (resp.resultCode == 200) {
+                        // alert("1223")
+                        // alert(resp.data.nickName)
+                        sessionStorage.setItem("user",resp.data.nickName);
+                        that.$router.push({name:"mall_index",params:resp.data});
+                    }else{
+                        Swal.fire({
+                            text: resp,
+                            icon: "error", iconColor: "#f05b72",
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error.data);
+                });
+
+        }
     },
+    // eslint-disable-next-line no-unused-vars
+    watch: {'$route' (to, from) {
+        this.$router.go(0);
+    }
+ },
+
+//     watch: {
+//    // eslint-disable-next-line no-unused-vars
+//    $route(to, from) {
+//        window.location.reload(); //监测到路由发生跳转时刷新一次页面
+//    },
+// },
+    // eslint-disable-next-line no-unused-vars
+   
 }
 </script>
-<style lang="less" scoped>
-@import url('../../assets/mall/css/common.css');
-@import url('../../assets/mall/styles/login.css');
-@import url('../../assets/mall/styles/header.css');
-@import url('../../assets/admin/plugins/sweetalert2/sweetalert2.min.css');
+<style src="@/assets/mall/css/common.css"  scoped>
 </style>
+<style src="@/assets/mall/styles/login.css"  scoped>
+</style>
+<style src="@/assets/mall/styles/header.css"  scoped>
+</style>
+<style src="@/assets/admin/plugins/sweetalert2/sweetalert2.min.css"  scoped>
+</style>
+
 // <!-- jQuery -->
 // <!-- <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 // <script th:src="@{/admin/dist/js/public.js}"></script>
